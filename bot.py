@@ -136,7 +136,7 @@ async def theme(ctx, *args):
     #If the second argument is help, send all current sounds
     if args[0] == 'help':
         print(f"{user} is requesting all sounds")
-        message = allSoundsString
+        message = allSoundsString()
         await ctx.send(message)
         return
 

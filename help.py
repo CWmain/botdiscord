@@ -22,3 +22,5 @@ def allSoundsString():
     for sound in allSounds():
         message += sound + ', '
     message = message[:-2]
+
+    return message
