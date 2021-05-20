@@ -13,6 +13,7 @@ TOKEN = botInfo.BOTSTRING
 
 CONNECTED = {'channel': None, 'voice_client': None}
 CURRENT_USERS = {}
+QUEUE = []
 
 client = commands.Bot(command_prefix='.')
 
