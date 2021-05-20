@@ -21,8 +21,9 @@ client = commands.Bot(command_prefix='.')
 async def on_ready():
     print('Bot is ready.')
 
+
 @client.event
-async def on_voice_state_update(token, guild_id, endpoint):
+async def on_voice_state_update(token, before, after):
     global CONNECTED
     global CURRENT_USERS
 
@@ -32,10 +33,10 @@ async def on_voice_state_update(token, guild_id, endpoint):
     if user == 'FunnySounds#5784':
         return
 
-    previous_channel = guild_id.channel
-    channel = endpoint.channel
-    #print(f"GUILD\n{guild_id}\n")
-    #print(f"ENDPOINT\n{endpoint}\n")
+    previous_channel = before.channel
+    channel = after.channel
+    #print(f"GUILD\n{before}\n")
+    #print(f"after\n{after}\n")
 
     #If user is joinging channel None, it means that they left the voice channel
     if channel == None:
@@ -254,31 +255,6 @@ async def play(ctx, audio):
 
     await ctx.voice_client.disconnect()
 
-"""
-@client.command()
-async def play(ctx, url):
-    voice = get(client.voice_clients, guild=ctx.guild)
-    YDL_OPTIONS = {
-        'format': 'bestaudio',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'outtmpl': 'song.%(ext)s',
-    }
-
-    with YoutubeDL(YDL_OPTIONS) as ydl:
-        ydl.download('MbhXIddT2YY&t=596s&ab_channel=Lucas')
-
-    if not voice.is_playing():
-        voice.play(FFmpegPCMAudio("song.mp3"))
-        voice.is_playing()
-        await ctx.send(f"Now playing {url}")
-    else:
-        await ctx.send("Already playing song")
-        return
-"""
 
 @client.command()
 async def leave(ctx):
