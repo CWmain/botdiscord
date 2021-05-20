@@ -13,3 +13,12 @@ def allSounds():
 
 if __name__ == '__main__':
     print(allSounds())
+
+def allSoundsString():
+    '''
+    Returns a printable string off all lists
+    '''
+    message = '**All sounds:**\n   '
+    for sound in allSounds():
+        message += sound + ', '
+    message = message[:-2]

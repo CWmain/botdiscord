@@ -4,7 +4,7 @@ from discord.opus import load_opus
 from json import load, dump
 from discord.utils import get
 from time import sleep
-from help import allSounds
+from help import allSoundsString
 from ping import incrementPing, allPings
 from theme import themeSong, themeUpdate, themeCurrent
 import botInfo
@@ -136,10 +136,7 @@ async def theme(ctx, *args):
     #If the second argument is help, send all current sounds
     if args[0] == 'help':
         print(f"{user} is requesting all sounds")
-        message = '**All sounds:**\n   '
-        for sound in allSounds():
-            message += sound + ', '
-        message = message[:-2]
+        message = allSoundsString
         await ctx.send(message)
         return
 
@@ -231,10 +228,7 @@ async def play(ctx, audio):
 
     if audio == 'help':
         print(f"{user} is requesting all sounds")
-        message = '**All sounds:**\n   '
-        for sound in allSounds():
-            message += sound + ', '
-        message = message[:-2]
+        message = allSoundsString()
         await ctx.send(message)
         return
 
@@ -254,7 +248,6 @@ async def play(ctx, audio):
         sleep(1)
 
     await ctx.voice_client.disconnect()
-
 
 @client.command()
 async def leave(ctx):
