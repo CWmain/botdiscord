@@ -7,6 +7,7 @@ from time import sleep
 from help import allSoundsString
 from ping import incrementPing, allPings
 from theme import themeSong, themeUpdate, themeCurrent
+import HexToAscii as h
 import botInfo
 
 TOKEN = botInfo.BOTSTRING
@@ -21,15 +22,11 @@ client = commands.Bot(command_prefix='.')
 async def on_ready():
     print('Bot is ready.')
 
-@client.event
-async def on_voice_server_update(data):
-    print(data)
-    print("USER JOINED")
 
-@client.event
-async def on_socket_raw_receive(msg):
-    print(msg)
-    print("The above was recieved!")
+# @client.event
+# async def on_socket_raw_receive(msg):
+#     print(msg)
+#     print("The above was recieved!")
 
 @client.event
 async def on_voice_state_update(token, before, after):
