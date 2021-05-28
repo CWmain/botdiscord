@@ -92,7 +92,7 @@ async def on_voice_state_update(token, before, after):
             for v_client in client.voice_clients:
                 await v_client.disconnect(force=True)
 
-    print(voice_client.ws)
+    #print(voice_client.ws)
 
 
     print(f'Started Playing {toPlay}')
