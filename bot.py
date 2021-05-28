@@ -21,6 +21,15 @@ client = commands.Bot(command_prefix='.')
 async def on_ready():
     print('Bot is ready.')
 
+@client.event
+async def on_voice_server_update(data):
+    print(data)
+    print("USER JOINED")
+
+@client.event
+async def on_socket_raw_receive(msg):
+    print(msg)
+    print("The above was recieved!")
 
 @client.event
 async def on_voice_state_update(token, before, after):
@@ -35,7 +44,7 @@ async def on_voice_state_update(token, before, after):
 
     previous_channel = before.channel
     channel = after.channel
-    #print(f"GUILD\n{before}\n")
+    #print(f"before\n{before}\n")
     #print(f"after\n{after}\n")
 
     #If user is joinging channel None, it means that they left the voice channel
@@ -76,13 +85,8 @@ async def on_voice_state_update(token, before, after):
             print("Attempting to connect")
             voice_client = await channel.connect()
             toPlay = themeSong(user)
-            #toPlay = "sounds/hello.mp3"
-            print("Probing")
             source = await FFmpegOpusAudio.from_probe(toPlay)
-
             voice_client.play(source)
-            print("player")
-
 
             joined = True
         except:
@@ -91,14 +95,13 @@ async def on_voice_state_update(token, before, after):
             for v_client in client.voice_clients:
                 await v_client.disconnect(force=True)
 
+    print(voice_client.ws)
 
 
-
-
-
+    print(f'Started Playing {toPlay}')
     while voice_client.is_playing() == True:
-        sleep(0.5)
-        print('Sound is playing')
+        sleep(1)
+    print(f'Finished Playing {toPlay}')
 
     for v_client in client.voice_clients:
         await v_client.disconnect(force=True)
