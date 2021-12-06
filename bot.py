@@ -2,6 +2,7 @@ from discord import FFmpegOpusAudio
 from discord.ext import commands
 from discord.opus import load_opus
 from json import load, dump
+from discord.player import FFmpegPCMAudio
 from discord.utils import get
 from time import sleep
 from help import allSoundsString
@@ -41,8 +42,7 @@ async def on_voice_state_update(token, before, after):
 
     previous_channel = before.channel
     channel = after.channel
-    #print(f"before\n{before}\n")
-    #print(f"after\n{after}\n")
+
 
     #If user is joinging channel None, it means that they left the voice channel
     if channel == None:
@@ -50,9 +50,10 @@ async def on_voice_state_update(token, before, after):
         #If this fails, it means they were already in the server when the bot was turned on
         try:
             CURRENT_USERS[previous_channel].remove(user)
+            print(f"User {user} left {previous_channel}")
         except:
             print(f"User {user} wasn't already joined")
-        print(f"User {user} left {previous_channel}")
+       
         return
 
     print(f'{user} joined {channel}')
@@ -76,33 +77,29 @@ async def on_voice_state_update(token, before, after):
 
     #Attempts to join a voice channel, if this fails disconnects and trys again
     print(f"Joining channel {channel}")
-    joined = False
-    while joined is False:
-        try:
-            print("Attempting to connect")
-            voice_client = await channel.connect()
-            toPlay = themeSong(user)
-            source = await FFmpegOpusAudio.from_probe(toPlay)
-            voice_client.play(source)
 
-            joined = True
-        except:
-            print("Reattempting connection")
-            #Disconnects all voice clients
-            for v_client in client.voice_clients:
-                await v_client.disconnect(force=True)
+    print("Attempting to connect")
+    voice_client = await channel.connect()
+    
+    toPlay = themeSong(user)
+    
+    print("Creating FFmpegPCMAudio")
+    voice_client.play(FFmpegPCMAudio(source=toPlay))
 
-    #print(voice_client.ws)
-
-
-    print(f'Started Playing {toPlay}')
+    print(f'Started Playing {toPlay} for {user}')
+    
     while voice_client.is_playing() == True:
         sleep(1)
-    print(f'Finished Playing {toPlay}')
-
+    print(f'Finished Playing {toPlay} for {user}')
+    
+    sleep(5)
+    
     for v_client in client.voice_clients:
         await v_client.disconnect(force=True)
+    
     print(f"Bot has left {channel}")
+
+    return
 
 @client.command()
 async def ping(ctx, *args):
@@ -246,7 +243,7 @@ async def play(ctx, audio):
 
     while voice_client.is_playing() is True:
         sleep(1)
-
+    sleep(10)
     await ctx.voice_client.disconnect()
 
 @client.command()
